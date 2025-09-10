@@ -1,24 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+// src/App.js
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { useState } from "react";
+import UrlShortenerForm from "./components/UrlShortenerForm";
+import UrlList from "./components/UrlList";
+import StatsTable from "./components/StatsTable";
+import { Button } from "@mui/material";
 
 function App() {
+  const [urls, setUrls] = useState([]);
+
+  const handleShorten = (data) => {
+    setUrls((prev) => [...prev, data]); // Add locally for live UI updates
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <nav style={{ display: "flex", gap: "1rem", padding: "1rem" }}>
+        <Button component={Link} to="/">Shortener</Button>
+        <Button component={Link} to="/stats">Statistics</Button>
+      </nav>
+
+      <Routes>
+        <Route path="/" element={
+          <>
+            <UrlShortenerForm onShorten={handleShorten} />
+            <UrlList urls={urls} />
+          </>
+        } />
+        <Route path="/stats" element={<StatsTable />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
